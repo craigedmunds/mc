@@ -101,7 +101,7 @@ command :campaigns do |c|
     
     s.action do |global,options,args|
       if options[:"saved-segment-id"]
-        segment_opts = {:saved_segment_id => options[:"saved-segment-id"]
+        segment_opts = {:saved_segment_id => options[:"saved-segment-id"]}
       elsif options[:seg_options]
         field, value = options[:seg_options].split(",") if options[:seg_options]
         segment_conditions = [{:field => field, :op => "like", :value => value}]

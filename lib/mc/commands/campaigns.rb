@@ -96,10 +96,17 @@ command :campaigns do |c|
     s.desc 'segmentation options [NAME,VALUE]'
     s.flag 'seg-options'
 
+    s.desc 'saved-segment-id VALUE'
+    s.flag 'saved-segment-id'
+    
     s.action do |global,options,args|
-      if options[:seg_options]
+      if options[:"saved-segment-id"]
+        segment_opts = {:saved_segment_id => options[:"saved-segment-id"]
+      elsif options[:seg_options]
         field, value = options[:seg_options].split(",") if options[:seg_options]
         segment_conditions = [{:field => field, :op => "like", :value => value}]
+        segment_opts = {:match => "all", :conditions => segment_conditions}
+      
       end
 
       type = options[:type]
@@ -137,7 +144,6 @@ command :campaigns do |c|
         :text => text
       }
 
-      segment_opts = {:match => "all", :conditions => segment_conditions} unless segment_conditions.nil?
       type_opts = {}
 
       campaign = @mailchimp.campaigns_create(:type => type, :options => standard_opts, :content => content, :segment_opts => segment_opts, :type_opts => type_opts)
